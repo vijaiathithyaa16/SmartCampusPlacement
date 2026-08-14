@@ -11,42 +11,65 @@ public class RegisterPage extends JFrame {
 
     public RegisterPage() {
         setTitle("Student Registration");
-        setSize(400, 450);
+        setSize(480, 550);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // closes only this window, not the whole app
-        setLayout(new GridLayout(8, 2, 10, 10));
-        ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(new Color(240, 255, 240));
 
-        add(new JLabel("Name:"));
+        JLabel heading = new JLabel("Create Student Account", SwingConstants.CENTER);
+        heading.setFont(new Font("SansSerif", Font.BOLD, 20));
+        heading.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        add(heading, BorderLayout.NORTH);
+
+        JPanel formPanel = new JPanel(new GridLayout(7, 2, 10, 12));
+        formPanel.setOpaque(false);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+
+        formPanel.add(new JLabel("Name:"));
         nameField = new JTextField();
-        add(nameField);
+        formPanel.add(nameField);
 
-        add(new JLabel("Email:"));
+        formPanel.add(new JLabel("Email:"));
         emailField = new JTextField();
-        add(emailField);
+        formPanel.add(emailField);
 
-        add(new JLabel("Department:"));
+        formPanel.add(new JLabel("Department:"));
         deptField = new JTextField();
-        add(deptField);
+        formPanel.add(deptField);
 
-        add(new JLabel("Year (1-4):"));
+        formPanel.add(new JLabel("Year (1-4):"));
         yearField = new JTextField();
-        add(yearField);
+        formPanel.add(yearField);
 
-        add(new JLabel("CGPA (0-10):"));
+        formPanel.add(new JLabel("CGPA (0-10):"));
         cgpaField = new JTextField();
-        add(cgpaField);
+        formPanel.add(cgpaField);
 
-        add(new JLabel("Skills (comma separated):"));
+        formPanel.add(new JLabel("Skills (comma separated):"));
         skillsField = new JTextField();
-        add(skillsField);
+        formPanel.add(skillsField);
 
-        add(new JLabel("Password:"));
+        formPanel.add(new JLabel("Password:"));
         passField = new JPasswordField();
-        add(passField);
+        formPanel.add(passField);
+
+        add(formPanel, BorderLayout.CENTER);
 
         JButton registerBtn = new JButton("Register");
-        add(registerBtn);
+        registerBtn.setBackground(new Color(40, 160, 90));
+        registerBtn.setForeground(Color.WHITE);
+        registerBtn.setFont(new Font("SansSerif", Font.BOLD, 14));
+        registerBtn.setOpaque(true);
+        registerBtn.setBorderPainted(false);
+        registerBtn.setFocusPainted(false);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 20, 30));
+        buttonPanel.add(registerBtn);
+        add(buttonPanel, BorderLayout.SOUTH);
+
         registerBtn.addActionListener(e -> register());
     }
 
@@ -56,7 +79,6 @@ public class RegisterPage extends JFrame {
         String department = deptField.getText();
         String password = new String(passField.getPassword());
 
-        // basic validation - beginner style: just check the fields aren't empty
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Name, Email and Password are required.");
             return;
@@ -85,18 +107,14 @@ public class RegisterPage extends JFrame {
             ps.setDouble(6, cgpa);
             ps.setString(7, skillsField.getText());
 
-            ps.executeUpdate(); // for INSERT/UPDATE/DELETE, we use executeUpdate() not executeQuery()
+            ps.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Registration successful! You can now log in.");
-            dispose(); // closes this registration window
+            dispose();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             ex.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        new RegisterPage().setVisible(true);
     }
 }
